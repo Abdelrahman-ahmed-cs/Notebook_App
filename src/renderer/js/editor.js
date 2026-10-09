@@ -332,8 +332,7 @@ export class Editor extends Emitter {
     if (v.fc.getActiveObject()?.isEditing) return; // never drop a canvas mid-typing
     if (this.activeView === v && v.fc.getActiveObject()) return;
     v.fc.dispose();
-    v.fc.wrapperEl?.remove?.();
-    v.frame.querySelectorAll('.canvas-container').forEach((n) => n.remove());
+    this.clearCanvases(v);
     v.fc = null;
     v.dataRef = undefined;
   }
@@ -342,13 +341,19 @@ export class Editor extends Emitter {
     for (const v of this.views.values()) {
       if (v.fc) {
         v.fc.dispose();
-        v.frame.querySelectorAll('.canvas-container').forEach((n) => n.remove());
+        this.clearCanvases(v);
         v.fc = null;
       }
       this.io.unobserve(v.frame);
       v.wrap.remove();
     }
     this.views.clear();
+  }
+
+  /** Fabric's dispose() puts the original <canvas> back; remove everything but the background. */
+  clearCanvases(v) {
+    v.frame.querySelectorAll('.canvas-container').forEach((n) => n.remove());
+    v.frame.querySelectorAll(':scope > canvas:not(.page-bg)').forEach((n) => n.remove());
   }
 
   reloadCanvas(v) {
