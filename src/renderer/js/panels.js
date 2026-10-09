@@ -35,12 +35,14 @@ export class Panels {
     this.el.hidden = false;
     document.body.classList.add('has-rightpanel');
     this.render();
+    requestAnimationFrame(() => this.ed.emit('viewport'));
   }
 
   close() {
     this.current = null;
     this.el.hidden = true;
     document.body.classList.remove('has-rightpanel');
+    requestAnimationFrame(() => this.ed.emit('viewport'));
   }
 
   render() {

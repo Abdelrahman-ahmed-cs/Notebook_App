@@ -344,15 +344,18 @@ export class ToolController {
       let a = Math.max(x1, minX);
       let b = Math.min(x2, maxX);
       if (b - a < 3) continue;
-      // Extend to whole words (character widths approximated proportionally).
+      // Extend to whole words, using the font's real character widths.
       const n = it.str.length;
       if (n > 1) {
-        const cw = (x2 - x1) / n;
-        let i = Math.max(0, Math.floor((a - x1) / cw + 0.35));
-        let j = Math.min(n, Math.ceil((b - x1) / cw - 0.35));
+        const off = pdf.charOffsets(it).map((v) => x1 + v * sx);
+        let i = off.findIndex((v, k) => k < n && off[k + 1] > a + (off[k + 1] - v) * 0.35);
+        let j = n - [...off].reverse().findIndex((v) => v < b - 1);
+        if (i < 0) i = 0;
+        j = Math.max(i + 1, Math.min(n, j));
         while (i > 0 && /\S/.test(it.str[i - 1])) i--;
         while (j < n && /\S/.test(it.str[j])) j++;
-        if (j > i) { a = x1 + i * cw; b = x1 + j * cw; }
+        a = off[i];
+        b = off[j];
       }
       const line = lines.find((l) => Math.abs(l.y1 - y1) < (y2 - y1) * 0.5);
       if (line) { line.a = Math.min(line.a, a); line.b = Math.max(line.b, b); line.y2 = Math.max(line.y2, y2); }

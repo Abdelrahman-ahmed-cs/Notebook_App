@@ -33,7 +33,7 @@ export class Home {
     </div>`);
     const actions = inner.querySelector('.actions');
     const action = (ic, name, desc, fn) => {
-      const b = h(`<button class="start-card action"><div class="sc-art">${icon(ic, 32)}</div><div class="sc-name">${esc(name)}</div><div class="sc-desc">${esc(desc)}</div></button>`);
+      const b = h(`<button class="start-card action"><div class="sc-art">${icon(ic, 22)}</div><div class="sc-name">${esc(name)}</div><div class="sc-desc">${esc(desc)}</div></button>`);
       b.addEventListener('click', fn);
       actions.appendChild(b);
     };
@@ -47,7 +47,7 @@ export class Home {
       const b = h(`<button class="start-card"><div class="sc-art"></div><div class="sc-name">${esc(s.name)}</div><div class="sc-desc">${esc(s.desc)}</div></button>`);
       const art = b.querySelector('.sc-art');
       const c = templateThumb(s.template, '#ffffff', 150, s.landscape ? 84 : 200);
-      if (s.landscape) { art.style.aspectRatio = '16 / 9'; art.style.alignSelf = 'start'; }
+      if (s.landscape) art.classList.add('landscape');
       art.appendChild(c);
       b.addEventListener('click', () => this.app.newFromTemplate(s));
       tpl.appendChild(b);
@@ -63,8 +63,12 @@ export class Home {
     }
     this.el.appendChild(inner);
     this.el.hidden = false;
+    document.body.classList.add('home-open');
   }
 
-  hide() { this.el.hidden = true; }
+  hide() {
+    this.el.hidden = true;
+    document.body.classList.remove('home-open');
+  }
   get visible() { return !this.el.hidden; }
 }

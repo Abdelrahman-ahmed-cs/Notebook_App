@@ -120,6 +120,7 @@ class App {
       redo: () => ed.redo(),
       toggleSidebar: () => {
         document.body.classList.toggle('sidebar-hidden');
+        requestAnimationFrame(() => ed.emit('viewport'));
         this.saveSettings({ sidebarHidden: document.body.classList.contains('sidebar-hidden') });
       },
       insertImage: () => this.insertImageDialog(),

@@ -102,8 +102,21 @@ export async function pdfTextItems(assetId, bytes, pageIndex) {
     .map((it) => {
       const [, , , , e, f] = pdfjsLib.Util.transform(vp.transform, it.transform);
       const h = Math.hypot(it.transform[2], it.transform[3]) * PX_PER_PT;
-      return { str: it.str, x: e, y: f - h, width: it.width * PX_PER_PT, height: h * 1.15 };
+      const family = content.styles?.[it.fontName]?.fontFamily || 'sans-serif';
+      return { str: it.str, x: e, y: f - h, width: it.width * PX_PER_PT, height: h * 1.15, family };
     });
+}
+
+let measureCtx = null;
+/** X offsets (page px, relative to item start) of every character boundary, from real font metrics. */
+export function charOffsets(item) {
+  if (item.offsets) return item.offsets;
+  measureCtx ||= document.createElement('canvas').getContext('2d');
+  measureCtx.font = `100px ${item.family || 'sans-serif'}`;
+  const total = measureCtx.measureText(item.str).width || 1;
+  item.offsets = [];
+  for (let k = 0; k <= item.str.length; k++) item.offsets.push((measureCtx.measureText(item.str.slice(0, k)).width / total) * item.width);
+  return item.offsets;
 }
 
 // ---------- export ----------

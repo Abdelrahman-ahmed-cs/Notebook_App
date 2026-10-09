@@ -863,6 +863,7 @@ body.has-rightpanel .status-pill { right: calc(16px + 320px); }
   background: var(--bg-base);
   overflow-y: auto;
 }
+body.home-open .tb-center, body.home-open #search-open { visibility: hidden; }
 .home-inner { max-width: 1080px; margin: 0 auto; padding: 32px 40px 64px; }
 .home h1 { font: 600 28px/36px var(--font-display); margin: 0 0 4px; }
 .home .sub { color: var(--fg2); margin: 0 0 28px; }
@@ -893,7 +894,36 @@ body.has-rightpanel .status-pill { right: calc(16px + 320px); }
 .start-card:hover .sc-art { box-shadow: var(--shadow-16); transform: translateY(-2px); }
 .start-card .sc-name { font-weight: 600; }
 .start-card .sc-desc { color: var(--fg3); font-size: 12px; margin-top: -8px; }
-.start-card.action .sc-art { background: var(--bg-layer); border: 1px dashed var(--fg3); box-shadow: none; }
+.start-row.actions { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.start-card.action {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--stroke-card);
+  border-radius: var(--r-overlay);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-2);
+  transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.start-card.action:hover { box-shadow: var(--shadow-8); border-color: var(--accent); }
+.start-card.action .sc-art {
+  grid-row: 1 / 3;
+  aspect-ratio: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-overlay);
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+  box-shadow: none;
+}
+.start-card.action:hover .sc-art { box-shadow: none; transform: none; }
+.start-card.action .sc-desc { margin-top: 0; }
+.start-card .sc-art.landscape { background: var(--bg-canvas); align-items: center; }
+.start-card .sc-art.landscape canvas { height: auto; box-shadow: var(--shadow-2); }
 .recent-list { display: grid; gap: 2px; }
 .recent-item { display: flex; align-items: center; gap: 12px; width: 100%; height: 44px; padding: 0 12px; border: 0; border-radius: var(--r-control); background: transparent; text-align: left; }
 .recent-item:hover { background: var(--fill-subtle-hover); }
