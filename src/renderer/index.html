@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' app:; script-src 'self' app:; style-src 'self' app: 'unsafe-inline'; img-src 'self' app: blob: data:; font-src 'self' app: data: local:; media-src 'self' app: blob:; worker-src 'self' app: blob:; connect-src 'self' app: blob: data:">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InkNote Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="vendor/fabric.min.js"></script>
+  <script src="vendor/pdf.min.js"></script>
+  <script src="vendor/pdf-lib.min.js"></script>
+  <script src="vendor/jszip.min.js"></script>
+</head>
+<body data-tool="select">
+  <header id="titlebar">
+    <div class="tb-left">
+      <span class="app-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24"><rect x="3.5" y="2.5" width="15" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 7.5h7M7 11h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14.5 21.5l6-6 1.8 1.8-6 6h-1.8z" fill="var(--accent)"/></svg>
+      </span>
+      <nav id="menubar" aria-label="Main menu">
+        <button data-menu="file">File</button>
+        <button data-menu="edit">Edit</button>
+        <button data-menu="insert">Insert</button>
+        <button data-menu="page">Page</button>
+        <button data-menu="view">View</button>
+        <button data-menu="help">Help</button>
+      </nav>
+    </div>
+    <div class="tb-center">
+      <button id="doc-title" class="doc-title" title="Rename notebook"><span class="crumb">Notebooks</span><i data-icon="chevronRight" data-size="14"></i><span id="doc-name">Untitled notebook</span><span id="dirty-dot" class="dirty-dot" hidden title="Unsaved changes"></span></button>
+    </div>
+    <div class="tb-right">
+      <button id="search-open" class="search-box" title="Search (Ctrl+F)"><i data-icon="search" data-size="16"></i><span>Search notebook</span><kbd>Ctrl+F</kbd></button>
+    </div>
+  </header>
+
+  <div id="toolbar" role="toolbar" aria-label="Tools">
+    <div class="zone zone-left">
+      <button class="tbtn" data-cmd="toggleSidebar" title="Pages panel (Ctrl+\)"><i data-icon="sidebar"></i></button>
+      <span class="sep"></span>
+      <button class="tbtn" data-cmd="undo" id="btn-undo" title="Undo (Ctrl+Z)"><i data-icon="undo"></i></button>
+      <button class="tbtn" data-cmd="redo" id="btn-redo" title="Redo (Ctrl+Y)"><i data-icon="redo"></i></button>
+    </div>
+    <div class="zone zone-center">
+      <div class="tools" id="tools">
+        <button class="tool" data-tool="select" title="Select (V)"><i data-icon="select"></i></button>
+        <button class="tool" data-tool="lasso" title="Lasso (L)"><i data-icon="lasso"></i></button>
+        <button class="tool ink-tool" data-tool="pen" title="Pen (P) — click again for pen settings"><i data-icon="pen"></i><span class="ink-bar"></span></button>
+        <button class="tool ink-tool" data-tool="highlighter" title="Highlighter (H) — click again for settings"><i data-icon="highlighter"></i><span class="ink-bar"></span></button>
+        <button class="tool" data-tool="eraser" title="Eraser (E) — click again for settings"><i data-icon="eraser"></i></button>
+        <button class="tool" data-tool="text" title="Text (T)"><i data-icon="text"></i></button>
+        <button class="tool" data-tool="shape" title="Shapes (S)"><i data-icon="shapes"></i></button>
+        <button class="tool" data-cmd="insertImage" title="Image (I)"><i data-icon="image"></i></button>
+        <button class="tool" data-cmd="addSticky" title="Sticky note (N)"><i data-icon="sticky"></i></button>
+        <button class="tool" data-tool="tape" title="Study tape — cover answers, click to reveal"><i data-icon="tape"></i></button>
+        <button class="tool" data-tool="laser" title="Laser pointer (K)"><i data-icon="laser"></i></button>
+        <button class="tool" data-tool="hand" title="Pan (hold Space)"><i data-icon="hand"></i></button>
+      </div>
+      <span class="sep tall"></span>
+      <div id="tool-context" class="tool-context"></div>
+    </div>
+    <div class="zone zone-right">
+      <button class="tbtn" data-cmd="record" id="btn-record" title="Record audio synced to your notes"><i data-icon="mic"></i></button>
+      <button class="tbtn" data-cmd="present" title="Present (F5)"><i data-icon="play"></i></button>
+      <span class="sep"></span>
+      <button class="tbtn labeled" data-cmd="addPage" title="Add page after current (Ctrl+Shift+N)"><i data-icon="pagePlus"></i><span>Page</span></button>
+      <button class="btn primary" data-cmd="exportPdf" title="Export PDF (Ctrl+Shift+E)"><i data-icon="export" data-size="16"></i><span>Export</span></button>
+    </div>
+  </div>
+
+  <main id="workspace">
+    <aside id="sidebar" aria-label="Pages">
+      <div class="side-head">
+        <div class="seg" role="tablist">
+          <button role="tab" class="on" data-side="pages">Pages</button>
+          <button role="tab" data-side="outline">Outline</button>
+        </div>
+        <span id="page-count" class="muted"></span>
+        <button class="ibtn" data-cmd="addPageEnd" title="Add page at end"><i data-icon="plus" data-size="18"></i></button>
+      </div>
+      <div id="thumbs" class="thumbs" tabindex="0"></div>
+      <div id="outline" class="outline" hidden></div>
+      <div class="side-resizer" id="side-resizer" title="Drag to resize"></div>
+    </aside>
+
+    <section id="viewport" tabindex="-1">
+      <div id="pages" class="pages"></div>
+    </section>
+
+    <div id="selbar" class="selbar" hidden></div>
+
+    <div id="status-pill" class="status-pill">
+      <button class="ibtn" data-cmd="zoomOut" title="Zoom out (Ctrl+−)"><i data-icon="minus" data-size="16"></i></button>
+      <button id="zoom-label" class="zoom-label" title="Zoom presets">100%</button>
+      <button class="ibtn" data-cmd="zoomIn" title="Zoom in (Ctrl+=)"><i data-icon="plus" data-size="16"></i></button>
+      <button class="ibtn" data-cmd="fitWidth" title="Fit width (Shift+2)"><i data-icon="fit" data-size="16"></i></button>
+      <span class="sep"></span>
+      <label class="page-jump" title="Go to page">
+        <input id="page-input" type="text" inputmode="numeric" value="1" aria-label="Current page">
+        <span>/ <span id="page-total">1</span></span>
+      </label>
+    </div>
+
+    <div id="audio-bar" class="audio-bar" hidden></div>
+    <aside id="rightpanel" class="rightpanel" hidden></aside>
+  </main>
+
+  <section id="home" class="home" hidden></section>
+  <div id="flyouts"></div>
+  <div id="modal-root"></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="present" class="present" hidden></div>
+  <div id="print-root"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

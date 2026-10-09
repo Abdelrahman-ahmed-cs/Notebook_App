@@ -1,0 +1,98 @@
+{
+  "name": "inknote-studio",
+  "productName": "InkNote Studio",
+  "version": "1.0.0",
+  "description": "Offline Canva-style notebook for Windows: PDFs, blank pages, rich text, images, shapes and pen annotation.",
+  "main": "src/main/main.js",
+  "author": "Abdelrahman Ahmed",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "vendor": "node scripts/vendor.js",
+    "postinstall": "node scripts/vendor.js",
+    "check": "node scripts/check.js",
+    "dist": "electron-builder --win --x64 --publish never",
+    "dist:dir": "electron-builder --win dir --x64 --publish never",
+    "test": "node tests/smoke.mjs"
+  },
+  "devDependencies": {
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
+    "fabric": "^5.3.0",
+    "jszip": "^3.10.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^3.11.174",
+    "perfect-freehand": "^1.2.2",
+    "playwright-core": "^1.56.1",
+    "resedit": "^2.0.3"
+  },
+  "build": {
+    "appId": "com.inknote.studio",
+    "productName": "InkNote Studio",
+    "copyright": "Copyright © 2026 Abdelrahman Ahmed",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "build/icon.png",
+      "!src/renderer/vendor/**/*.map"
+    ],
+    "asar": true,
+    "afterPack": "build/afterPack.cjs",
+    "fileAssociations": [
+      {
+        "ext": "inknote",
+        "name": "InkNote Notebook",
+        "description": "InkNote Studio notebook",
+        "icon": "build/icon.ico",
+        "role": "Editor"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false,
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "InkNote Studio",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}",
+      "deleteAppDataOnUninstall": false,
+      "license": "LICENSE"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    },
+    "electronLanguages": [
+      "en-US",
+      "ar"
+    ],
+    "compression": "maximum"
+  }
+}
