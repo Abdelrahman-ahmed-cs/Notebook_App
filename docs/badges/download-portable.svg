@@ -1,7 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="232" height="52" viewBox="0 0 232 52" role="img" aria-label="Portable version">
-  <rect x="0.5" y="0.5" width="231" height="51" rx="8" fill="#FFFFFF" stroke="#C8C8C8"/>
-  <rect x="20" y="14" width="16" height="24" rx="3" fill="none" stroke="#1F1F1F" stroke-width="2"/>
-  <path d="M24 14v-3h8v3" stroke="#1F1F1F" stroke-width="2" fill="none"/>
-  <text x="50" y="24" fill="#1F1F1F" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Portable .exe</text>
-  <text x="50" y="41" fill="#616161" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif" font-size="12">No install · runs from USB</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="232" height="52" aria-label="Portable version" role="img" viewBox="0 0 232 52"><rect width="231" height="51" x=".5" y=".5" fill="#FFF" stroke="#C8C8C8" rx="8"/><rect width="16" height="24" x="20" y="14" fill="none" stroke="#1F1F1F" stroke-width="2" rx="3"/><path fill="none" stroke="#1F1F1F" stroke-width="2" d="M24 14v-3h8v3"/><text x="50" y="24" fill="#1F1F1F" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Portable .exe</text><text x="50" y="41" fill="#616161" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif" font-size="12">No install · runs from USB</text></svg>
